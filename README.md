@@ -1,9 +1,10 @@
-###Application for SUS Calculation and Statistics.
+# Application for SUS Calculation and Statistics. #
+
 [System Usability Scale](https://www.usability.gov/how-to-and-tools/methods/system-usability-scale.html)
 
-Application have 2 APIs
+## Application have 2 APIs ##
 
-1. /sus/compute -> API for calculating the SUS score based on the submitted answers(POST method).
+### 1. /sus/compute -> API for calculating the SUS score based on the submitted answers(POST method). ###
 
 API expects answer points in Integer array of size 10 and of values between 1-5, otherwise API will throw BadRequest error
 
@@ -20,7 +21,7 @@ Response
 }
 ```
 
-2. /sus/statistics -> API for getting statistics of average SUS score based on the requested period type(GET method).
+### 2. /sus/statistics -> API for getting statistics of average SUS score based on the requested period type(GET method). ###
 
 API accepts following optional query parameters 
     1. 'period' -> to define the period type, possible values (ALL, HOUR, DAY, WEEK, MONTH, YEAR). By default consider type as ALL

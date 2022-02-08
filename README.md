@@ -6,12 +6,21 @@
 
 ### 1. /sus/compute -> API for calculating the SUS score based on the submitted answers(POST method). ###
 
-API expects answer points in Integer array of size 10 and of values between 1-5, otherwise API will throw BadRequest error
+API expects answer points of values between 1-5, otherwise API will throw BadRequest error
 
 Sample Request Body 
 ```json
 {
-    "answerPoints" : [5,1,5,4,2,3,3,4,5,3]
+  "ans1" : 5,
+  "ans2" : 1,
+  "ans3" : 5,
+  "ans4" : 4,
+  "ans5" : 2,
+  "ans6" : 3,
+  "ans7" : 3,
+  "ans8" : 4,
+  "ans9" : 10,
+  "ans10" : 3
 }
 ```
 Response

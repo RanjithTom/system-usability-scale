@@ -1,13 +1,10 @@
 package com.challenge.sus.service.impl;
 
-import com.challenge.sus.controller.SusScoreController;
 import com.challenge.sus.dto.*;
-import com.challenge.sus.exception.BusinessException;
 import com.challenge.sus.repository.SusScoreRepo;
 import com.challenge.sus.repository.dao.SusScoreDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.challenge.sus.service.SusScoreService;
@@ -35,9 +32,12 @@ public class SusScoreServiceImpl implements SusScoreService {
 
     @Override
     public SusScoreResponse calculateSusScore(SusScoreRequest request) {
-        double susScore = calculateSusScore(request.getAnswerPoints());
+        List<Integer> answerPoints = Arrays.asList(request.getAns1(), request.getAns2(),
+                request.getAns3(), request.getAns4(),request.getAns5(), request.getAns6(),
+                request.getAns7(), request.getAns8(),request.getAns9(), request.getAns10());
+        double susScore = calculateSusScoreForRequest(answerPoints);
 
-        SusScoreDetails scoreDetails = susScoreRepo.save(mapToSusScoreEntity(susScore, request.getAnswerPoints()));
+        SusScoreDetails scoreDetails = susScoreRepo.save(mapToSusScoreEntity(susScore, answerPoints));
         log.info("Calculated SUS score {}", susScore);
         return SusScoreResponse.builder().usabilityScore(scoreDetails.getSusScore()).build();
     }
@@ -208,7 +208,7 @@ public class SusScoreServiceImpl implements SusScoreService {
         return SusScoreDetails.builder().susScore(susScore).susAnswers(answerPoints).systemName("my system").build();
     }
 
-    private double calculateSusScore(List<Integer> answerPoints) {
+    private double calculateSusScoreForRequest(List<Integer> answerPoints) {
         double susScore = 0;
         for (int i = 0; i < answerPoints.size(); i++) {
             if (i % 2 == 0)

@@ -44,9 +44,7 @@ class SusScoreControllerTest {
     @Test
     void calculateSusScore() throws Exception {
 
-        SusScoreRequest susScoreRequest = new SusScoreRequest();
-        List<Integer> answerPoints = Arrays.asList(5,1,5,4,2,3,3,4,3,4);
-        susScoreRequest.setAnswerPoints(answerPoints);
+        SusScoreRequest susScoreRequest = getSusScoreRequest();
         SusScoreResponse susScoreResponse = SusScoreResponse.builder().usabilityScore(55.0).build();
         when(susScoreService.calculateSusScore(Mockito.isA(SusScoreRequest.class))).thenReturn(susScoreResponse);
         this.mockMvc
@@ -59,12 +57,16 @@ class SusScoreControllerTest {
                 .andExpect(jsonPath("$.usabilityScore", is(55.0)));
     }
 
+    private SusScoreRequest getSusScoreRequest() {
+        return SusScoreRequest.builder().ans1(5).ans2(1).ans3(5).ans4(4)
+                .ans5(2).ans6(3).ans7(3).ans8(4).ans9(3).ans10(4).build();
+    }
+
     @Test
     void calculateSusScore_ShouldReturnBadRequest() throws Exception {
 
-        SusScoreRequest susScoreRequest = new SusScoreRequest();
-        List<Integer> answerPoints = Arrays.asList(5,1,5,4,2,3,3,4,3);
-        susScoreRequest.setAnswerPoints(answerPoints);
+        SusScoreRequest susScoreRequest = getSusScoreRequest();
+        susScoreRequest.setAns4(10);
         SusScoreResponse susScoreResponse = SusScoreResponse.builder().usabilityScore(55.0).build();
         this.mockMvc
                 .perform(
@@ -73,7 +75,7 @@ class SusScoreControllerTest {
                                 .header("Content-Type", "application/json"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message", is("Need answers for 10 questions and values between 1 and 5")));
+                .andExpect(jsonPath("$.message", is("Request validation errors")));
     }
 
     @Test

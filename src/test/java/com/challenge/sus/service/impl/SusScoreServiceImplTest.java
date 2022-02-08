@@ -40,14 +40,19 @@ class SusScoreServiceImplTest {
 
     @Test
     void calculateSusScore_returnSuccess() {
-        SusScoreRequest susScoreRequest = new SusScoreRequest();
-        List<Integer> answerPoints = Arrays.asList(5,1,5,4,2,3,3,4,3);
-        susScoreRequest.setAnswerPoints(answerPoints);
+        SusScoreRequest susScoreRequest = getSusScoreRequest();
+        List<Integer> answerPoints = Arrays.asList(5, 1, 5, 4, 2, 3, 3, 4, 3, 4);
 
         when(susScoreRepo.save(Mockito.isA(SusScoreDetails.class))).thenReturn(getSusScore());
         SusScoreResponse response = susScoreService.calculateSusScore(susScoreRequest);
         verify(susScoreRepo, times(1)).save(Mockito.isA(SusScoreDetails.class));
         Assert.assertEquals(Double.valueOf(55), response.getUsabilityScore());
+    }
+
+    private SusScoreRequest getSusScoreRequest() {
+        return SusScoreRequest.builder().ans1(5).ans2(1).ans3(5).ans4(4)
+                .ans5(2).ans6(3).ans7(3).ans8(4).ans9(3).ans10(4).build();
+
     }
 
     @Test

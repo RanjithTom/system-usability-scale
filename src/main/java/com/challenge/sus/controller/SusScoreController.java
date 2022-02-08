@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -29,16 +30,7 @@ public class SusScoreController {
     }
 
     @PostMapping(value = "/compute", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<SusScoreResponse> calculateSusScore(@RequestBody SusScoreRequest request){
-        if(request.getAnswerPoints() == null || request.getAnswerPoints().isEmpty()) {
-            log.error("Answer Points is Mandatory, returning Bad Request");
-            throw new BusinessException("Answer Points is Mandatory", HttpStatus.BAD_REQUEST);
-        }
-        if (request.getAnswerPoints().size() != 10
-                || request.getAnswerPoints().stream().anyMatch(val -> val > 5 || val < 1)) {
-            log.error("Answer Points should be valid, returning Bad Request");
-            throw new BusinessException("Need answers for 10 questions and values between 1 and 5", HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<SusScoreResponse> calculateSusScore(@RequestBody @Valid SusScoreRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(susScoreService.calculateSusScore(request));
     }
 
